@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Төлеуханов Ерзат - Адал Азамат Платформасы</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #8b5cf6; /* Неон күлгін */
+            --accent: #22d3ee;  /* Неон көгілдір */
+            --bg: #030712;      /* Өте қою көк-қара */
+            --glass: rgba(255, 255, 255, 0.015);
+            --border: rgba(255, 255, 255, 0.08);
+            --neon-glow: 0 0 15px rgba(34, 211, 238, 0.3);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(34, 211, 238, 0.08) 0%, transparent 40%);
+        }
+
+        /* --- 3D INTERACTIVE LOGO & HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-3d-wrapper {
+            perspective: 1000px;
+            margin-bottom: 2rem;
+        }
+
+        .logo-3d {
+            width: 220px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid var(--accent);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            backdrop-filter: blur(25px);
+            box-shadow: var(--neon-glow), inset 0 0 20px rgba(34, 211, 238, 0.1);
+            animation: breathe 12s ease-in-out infinite, rotate3D 20s linear infinite;
+            transform-style: preserve-3d;
+            padding: 20px;
+            text-align: center;
+        }
+
+        @keyframes breathe {
+            0%, 100% { box-shadow: var(--neon-glow), inset 0 0 20px rgba(34, 211, 238, 0.1); transform: scale(1) rotate3D(0, 1, 0, 0deg); }
+            50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.4), inset 0 0 30px rgba(139, 92, 246, 0.2); transform: scale(1.05) rotate3D(0, 1, 0, 10deg); }
+        }
+
+        @keyframes rotate3D {
+            0% { transform: rotateY(0deg) rotateX(5deg); }
+            100% { transform: rotateY(360deg) rotateX(5deg); }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            background: linear-gradient(135deg, white 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .hero p { font-size: 1.3rem; color: #94a3b8; max-width: 600px; margin-top: 10px; }
+
+        /* --- CONTENT CONTAINERS --- */
+        .container { max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
+
+        .section-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 35px;
+            padding: 45px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(20px);
+            transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+        }
+
+        .section-card:hover {
+            border-color: rgba(34, 211, 238, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .section-card h2 {
+            font-size: 2rem;
+            margin-top: 0;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .theory { font-size: 1.1rem; color: #cbd5e1; margin-bottom: 35px; text-align: justify; line-height: 1.9; }
+
+        /* --- FUTURISTIC BUTTONS --- */
+        .video-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        
+        .yt-link {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(239, 68, 68, 0.2));
+            color: white;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 700;
+            transition: 0.4s;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .yt-link::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            transform: scale(0);
+            transition: 0.5s;
+        }
+
+        .yt-link:hover {
+            background: rgba(239, 68, 68, 1);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .yt-link:hover::after { transform: scale(1); }
+
+        /* --- LOCK & QUIZ (Futuristic Lock) --- */
+        .lock-notice {
+            background: rgba(30, 27, 75, 0.6);
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 25px;
+            border-radius: 25px;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+
+        .locked { opacity: 0.1; pointer-events: none; filter: blur(15px); transition: 1s ease-in-out; }
+        
+        .q-group {
+            background: rgba(255,255,255,0.02);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .q-group:hover { border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.02); }
+
+        input[type="radio"] { margin-right: 15px; transform: scale(1.3); accent-color: var(--accent); cursor: pointer; }
+        
+        .btn-check {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border: none;
+            padding: 22px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            width: 100%;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+            transition: 0.4s;
+        }
+        
+        .btn-check:hover {
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.5), 0 0 15px rgba(34, 211, 238, 0.5);
+            transform: translateY(-3px) scale(1.01);
+        }
+
+        footer { background: rgba(0,0,0,0.6); padding: 60px; text-align: center; border-top: 1px solid var(--border); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body>
+
+<section class="hero">
+    <div class="logo-3d-wrapper">
+        <div class="logo-3d">АДАЛ АЗАМАТ<br>БІРТҰТАС ТӘРБИЕ</div>
+    </div>
+    <h1>Төлеуханов Ерзат</h1>
+    <p>Математика пәні мұғалімі — Жаңа буын білім платформасы</p>
+    <a href="https://youtube.com/shorts/pBjml6xPYlw" target="_blank" class="yt-link" onclick="track(0)" style="width:280px; margin-top:20px; background: linear-gradient(135deg, var(--primary), var(--accent)); border:none; box-shadow: 0 10px 20px rgba(139,92,246,0.3);">КІРІСПЕ БЕЙНЕ</a>
+</section>
+
+<div class="container">
+    <div id="main-lock-screen" class="lock-notice">
+        🔒 ТЕСТКЕ РҰҚСАТ: <span id="progress-count">0</span> / 13 ВИДЕО ҚАРАЛДЫ
+    </div>
+
+    <div class="section-card">
+        <h2>1. Әділдік және Жауапкершілік</h2>
+        <div class="theory">
+            Әділдік – қоғамның іргетасын қалайтын ең басты құндылықтардың бірі. Ол әрбір адамның құқығын құрметтеу мен теңдікті сақтаудан басталады. Жауапкершілік болса, адамның өз ісіне, сөзіне және қабылдаған шешімдеріне есеп бере білуі. Математикалық теңдеулердегі дәлдік сияқты, өмірлік әділдік те ешқандай қателікті кешірмейді. Біз әділ болу арқылы айналамызға сенім мен құрмет ұялатамыз. Жауапкершілікті сезіну – бұл есейгендіктің және тұлғалық кемелдіктің белгісі. Әрбір оқушы мектеп қабырғасынан бастап өз міндеттерін білуі тиіс. Әділ қоғам орнату үшін біз ең алдымен өзімізге талап қоя білуіміз қажет. Өзгелердің еңбегін бағалау да әділдіктің бір көрінісі болып табылады. Жауапкершілік адамды еркіндікке жетелейді, өйткені өз ісіне сенімді адам ғана еркін шешім қабылдайды.
+        </div>
+        <div class="video-btns">
+            <a href="https://youtube.com/shorts/KcTasQbvGh0" target="_blank" class="yt-link" onclick="track(1)">БЕЙНЕ 1</a>
+            <a href="https://youtu.be/Ba2GdybNZXw" target="_blank" class="yt-link" onclick="track(2)">БЕЙНЕ 2</a>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>2. Тәуелсіздік және Отаншылдық</h2>
+        <div class="theory">
+            Тәуелсіздік – біздің ұлтымыздың ең қастерлі киесі және баға жетпес байлығы. Отаншылдық сезімі туған жердің топырағын сүюден және оның тарихын қастерлеуден басталады. Біз ата-бабаларымыздың қанымен келген азаттықтың қадірін терең ұғынуымыз қажет. Отанды сүю – бұл тек құрғақ ұран емес, еліңнің дамуына үлес қосу. Тәуелсіз мемлекеттің басты тірегі – оның білімді де отаншыл жастары. Әрбір математикалық формуланың артында логика жатса, мемлекеттің артында ұлттық мүдде жатыр. Тәуелсіздік бізге таңдау еркіндігін берді, ал отаншылдық сол таңдауды ел игілігіне жұмсауды талап етеді. Туған тілді, салт-дәстүрді сақтау – отаншылдықтың шынайы көрінісі. Мемлекеттік рәміздерді құрметтеу – әрбір азаматтың қасиетті борышы.
+        </div>
+        <div class="video-btns">
+            <a href="https://youtu.be/FEqB-1_sNUI" target="_blank" class="yt-link" onclick="track(3)">БЕЙНЕ 3</a>
+            <a href="https://youtu.be/yH_5hnY3fUU" target="_blank" class="yt-link" onclick="track(4)">БЕЙНЕ 4</a>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>3. Бірлік және Ынтымақ</h2>
+        <div class="theory">
+            Бірлік бар жерде тірлік бар екенін ата-бабаларымыз ежелден білген. Ынтымақ – қоғамдағы тыныштық пен тұрақтылықтың кепілі болып табылады. Біздің еліміздегі көпұлтты халықтың татулығы – әлемге үлгі боларлық жетістік. Бірлік дегеніміз тек бірге болу емес, ортақ мақсатқа бірге ұмтылу. Математикадағы сандар бірлесіп үлкен жүйені құрайтыны сияқты, адамдар да біріксе үлкен күшке айналады. Ынтымақ орнаған жерде кез келген қиындиқты жеңу жеңіл болады. Біз бір-бірімізге қолдау көрсету арқылы ғана биік шыңдарды бағындыра аламыз. Бірлік – бұл әртүрлі пікірлердің ортақ мәмілеге келуі. Татулық – таусылмайтын бақ, сондықтан оны көздің қарашығындай сақтау парыз.
+        </div>
+        <div class="video-btns">
+            <a href="https://youtu.be/L8k4OZUjbi0" target="_blank" class="yt-link" onclick="track(5)">БЕЙНЕ 5</a>
+            <a href="https://youtu.be/M0G_9g-ru1Y" target="_blank" class="yt-link" onclick="track(6)">БЕЙНЕ 6</a>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>4. Заң және Тәртіп</h2>
+        <div class="theory">
+            Заңның үстемдігі – өркениетті қоғамның ең басты белгісі. Тәртіп бар жерде ғана даму мен қауіпсіздік болады. Әрбір азамат заңды білуге және оны мүлтіксіз орындауға міндетті. Заң – бұл еркіндікті шектеу емес, керісінше әрбір адамның құқығын қорғау құралы. Математикалық ережелерді бұзу қате нәтижеге әкелсе, заңды бұзу қоғамдық дағдарысқа соқтырады. Мектептегі тәртіп оқушының болашақтағы кәсіби жетістігінің іргетасын қалайды. Біз заң алдында бәріміз теңбіз және жауаптымыз. Құқықтық мәдениетті қалыптастыру – заманауи тұлғаның қасиеті. Тәртіпке бағынған құл болмайды, тәртіпке бағынған ел болады.
+        </div>
+        <div class="video-btns">
+            <a href="https://youtu.be/Xv_355aRDDE" target="_blank" class="yt-link" onclick="track(7)">БЕЙНЕ 7</a>
+            <a href="https://youtu.be/pgx3bjkuGgM" target="_blank" class="yt-link" onclick="track(8)">БЕЙНЕ 8</a>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>5. Еңбекқорлық және Кәсіби біліктілік</h2>
+        <div class="theory">
+            Еңбек – адамды тұлға ретінде қалыптастыратын және табысқа жеткізетін жалғыз жол. Еңбекқорлық қасиеті жас кезінен бастап қалыптасуы тиіс. Кәсіби біліктілік – бұл өз ісіңнің шебері болу және заман ағымына сай даму. Математикалық есептерді шешу арқылы біз еңбек етуге және шыдамдылыққа үйренеміз. Адал еңбекпен табылған нанның дәмі әрқашан тәтті. Біз тек білім алып қана қоймай, сол білімді іс жүзінде қолдана білуіміз керек. Кәсіби маман болу үшін үздіксіз ізденіс пен тәжірибе қажет. Еңбек ету арқылы біз өзімізді ғана емес, мемлекетімізді де байытамыз.
+        </div>
+        <div class="video-btns">
+            <a href="https://youtu.be/ho8Juyx_5i8" target="_blank" class="yt-link" onclick="track(9)">БЕЙНЕ 9</a>
+            <a href="https://youtube.com/shorts/_qnUVoFP7l0" target="_blank" class="yt-link" onclick="track(10)">БЕЙНЕ 10</a>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>6. Жасампаздық және Жаңашылдық</h2>
+        <div class="theory">
+            Жасампаздық – бұл әлемге жаңа көзқараспен қарау және жаңа құндылықтар жасау қабілеті. Жаңашылдық заманауи технологиялар мен креативті шешімдерді өмірге енгізуді білдіреді. Математика – жасампаздиқтың негізі, өйткені ол абстрактілі ойлауды дамытады. Жаңа идеялар арқылы біз өмір сапасын жақсарта аламыз. Жасампаз адам кез келген мәселенің ең тиімді шешімін таба біледі. Біз жаңа технологияларды меңгеріп, оларды ел игілігіне жұмсауымыз қажет. Инновациялық ойлау – болашақтың басты құралы. Жасампаз жастар – жаңа Қазақстанның құрылысшылары.
+        </div>
+        <div class="video-btns">
+            <a href="https://youtu.be/bIXdLgxC3M4" target="_blank" class="yt-link" onclick="track(11)">БЕЙНЕ 11</a>
+            <a href="https://youtu.be/fjCLwKkjTdM" target="_blank" class="yt-link" onclick="track(12)">БЕЙНЕ 12</a>
+        </div>
+    </div>
+
+    <div id="quiz-block" class="locked">
+        <div class="section-card">
+            <h2 style="text-align: center; color: #4ade80; background:none; -webkit-text-fill-color: #4ade80;">🏁 ҚОРЫТЫНДЫ ТЕСТ (10 СҰРАҚ)</h2>
+            <p style="text-align:center; color: #94a3b8; margin-bottom: 30px;">Өту балы: 8/10. Сертификат автоматты түрде жүктеледі.</p>
+            
+            <div id="quiz-form">
+                <div class="q-group">
+                    <p><strong>1. "Адал азамат" ұғымының басты құндылығы не?</strong></p>
+                    <input type="radio" name="q1" value="1"> Әділдік пен ар-ұждан тазалығы<br>
+                    <input type="radio" name="q1" value="0"> Тек жеке бастың пайдасы
+                </div>
+                <div class="q-group">
+                    <p><strong>2. Жауапкершілік сезімі адамды неге жетелейді?</strong></p>
+                    <input type="radio" name="q2" value="1"> Тұлғалық кемелдікке<br>
+                    <input type="radio" name="q2" value="0"> Жалқаулыққа
+                </div>
+                <div class="q-group">
+                    <p><strong>3. Тәуелсіздіктің басты тірегі кімдер?</strong></p>
+                    <input type="radio" name="q3" value="1"> Білімді және отаншыл жастар<br>
+                    <input type="radio" name="q3" value="0"> Сыртқы күштер
+                </div>
+                <div class="q-group">
+                    <p><strong>4. "Бірлік" ұғымын математикалық тілмен қалай сипаттауға болады?</strong></p>
+                    <input type="radio" name="q4" value="1"> Бөлшектенбейтін бүтін жүйе<br>
+                    <input type="radio" name="q4" value="0"> Тұрақсыз айнымалы
+                </div>
+                <div class="q-group">
+                    <p><strong>5. Қоғамдағы тәртіптің кепілі не?</strong></p>
+                    <input type="radio" name="q5" value="0"> кездейсоқ жағдайлар<br>
+                    <input type="radio" name="q5" value="1"> Заңның үстемдігі
+                </div>
+                <div class="q-group">
+                    <p><strong>6. Еңбекқорлық адамның қандай қабілетін дамытады?</strong></p>
+                    <input type="radio" name="q6" value="1"> Төзімділік пен шеберлік<br>
+                    <input type="radio" name="q6" value="0"> Уақытты бос өткізу
+                </div>
+                <div class="q-group">
+                    <p><strong>7. Жасампаздық дегеніміз не?</strong></p>
+                    <input type="radio" name="q7" value="1"> Жаңа құндылықтар мен идеялар жасау<br>
+                    <input type="radio" name="q7" value="0"> Дайын нәрсені көшіру
+                </div>
+                <div class="q-group">
+                    <p><strong>8. болашақ кімнің қолында?</strong></p>
+                    <input type="radio" name="q8" value="0"> Мұғалімдердің<br>
+                    <input type="radio" name="q8" value="1"> Менің
+                </div>
+                <div class="q-group">
+                    <p><strong>9. Математика мен тәрбие арасында байланыс бар ма?</strong></p>
+                    <input type="radio" name="q9" value="1"> Иә, екеуі де тәртіп пен логикаға негізделген<br>
+                    <input type="radio" name="q9" value="0"> Жоқ, ешқандай байланыс жоқ
+                </div>
+                <div class="q-group">
+                    <p><strong>10. Болашақ Қазақстанның құрылысшысы кім?</strong></p>
+                    <input type="radio" name="q10" value="1"> Білімді де жасампаз әрбір шәкірт<br>
+                    <input type="radio" name="q10" value="0"> Тек қана технологиялар
+                </div>
+
+                <div style="background: rgba(0,0,0,0.3); padding: 30px; border-radius: 20px; border: 1px solid var(--border); margin-top: 40px;">
+                    <p style="font-size: 1.1rem; color: white;"><strong>Сертификат үшін толық аты-жөніңізді енгізіңіз:</strong></p>
+                    <input type="text" id="userName" placeholder="Мысалы: Аманжол Данияр" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background: rgba(0,0,0,0.5); color: white; font-size: 1.1rem; margin-top: 10px;">
+                </div>
+                <button class="btn-check" onclick="finishQuiz()">Нәтижені алу және Сертификат жүктеу</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p style="font-size: 1.3rem; color: white; font-weight: 700;"><strong>Төлеуханов Ерзат Нұржанұлы</strong></p>
+    <p style="color: #94a3b8;">Математика пәні мұғалімі</p>
+    <p>📞 87070179294 | &copy; 2026 Біртұтас Тәрбие Жобасы</p>
+</footer>
+
+<script>
+    let viewed = new Set();
+    const totalVideos = 13; // Басты бейне + 12 бөлімдік бейне
+
+    // ВидеоPROGRESS КҮЙІ
+    function track(id) {
+        viewed.add(id);
+        const count = document.getElementById('progress-count');
+        count.innerText = viewed.size;
+        
+        // Барлық видео қаралса, тестті блоктаудан шығару
+        if(viewed.size >= totalVideos) {
+            document.getElementById('quiz-block').classList.remove('locked');
+            document.getElementById('main-lock-screen').style.background = "#065f46"; // Жасыл
+            document.getElementById('main-lock-screen').innerHTML = "✅ БАРЛЫҚ ВИДЕОЛАР ҚАРАЛДЫ! ТЕСТ АШЫҚ.";
+            document.getElementById('quiz-block').style.opacity = '1';
+            document.getElementById('quiz-block').style.filter = 'none';
+        }
+    }
+
+    // ТЕСТ НӘТИЖЕСІН ТЕКСЕРУ
+    function finishQuiz() {
+        const name = document.getElementById('userName').value;
+        if(!name) return alert("Сертификат үшін атыңызды жазыңыз!");
+        
+        let score = 0;
+        // 10 сұрақты циклмен тексеру
+        for(let i=1; i<=10; i++) {
+            const ans = document.querySelector(`input[name="q${i}"]:checked`);
+            if(ans && ans.value === "1") score++;
+        }
+
+        // Шекті балл (8)
+        if(score < 8) return alert(`Сіздің нәтижеңіз: ${score}/10. Өту үшін кемінде 8 балл керек. Қайта көріп шығыңыз!`);
+        
+        generateSertifikat(name, score);
+    }
+
+// FREEPIK ҮЛГІСІНЕ ҰҚСАС КӘСІБИ СЕРТИФИКАТ ДИЗАЙНЫ
+function generateSertifikat(name, score) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('l', 'mm', 'a4'); // Альбомдық бағыт (A4)
+
+    // Кириллица (қазақша) қаріпті жүктеу (Міндетті түрде!)
+    const fontUrl = "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf";
+    
+    fetch(fontUrl)
+        .then(res => res.arrayBuffer())
+        .then(buffer => {
+            const base64Font = btoa(
+                new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), "")
+            );
+
+            doc.addFileToVFS("Roboto-Regular.ttf", base64Font);
+            doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+            doc.setFont("Roboto"); 
+
+            // --- СЕРТИФИКАТ ДИЗАЙНЫ (Freepik үлгісіне ұқсас) ---
+            // 1. Негізгі фон (Ақ)
+            doc.setFillColor(255, 255, 255); 
+            doc.rect(0, 0, 297, 210, 'F');
+            
+            // 2. БҰРЫШТАҒЫ ДЕКОРАТИВТІ ЭЛЕМЕНТТЕР (Қызыл және Алтын)
+            // Сол жақ жоғарғы бұрыш (Қызыл үшбұрыш)
+            doc.setFillColor(180, 0, 0); // Қою қызыл
+            doc.triangle(0, 0, 60, 0, 0, 60, 'F');
+            doc.setFillColor(212, 175, 55); // Алтын сызық
+            doc.triangle(0, 0, 65, 0, 0, 65, 'F');
+            doc.setFillColor(180, 0, 0); // Қайтадан қызыл (қабаттау)
+            doc.triangle(0, 0, 60, 0, 0, 60, 'F');
+
+            // Оң жақ төменгі бұрыш
+            doc.setFillColor(180, 0, 0);
+            doc.triangle(297, 210, 237, 210, 297, 150, 'F');
+            doc.setFillColor(212, 175, 55);
+            doc.triangle(297, 210, 232, 210, 297, 145, 'F');
+            doc.setFillColor(180, 0, 0);
+            doc.triangle(297, 210, 237, 210, 297, 150, 'F');
+
+            // 3. НЕГІЗГІ ЖАҚТАУ (Border)
+            doc.setDrawColor(180, 0, 0); // Қызыл жиек
+            doc.setLineWidth(1.5);
+            doc.rect(10, 10, 277, 190); 
+
+            // 4. ТАҚЫРЫПТАР (Классикалық стиль)
+            doc.setTextColor(30, 30, 30); // Қою сұр
+            doc.setFontSize(50);
+            doc.text("СЕРТИФИКАТ", 148, 50, {align: 'center'});
+            
+            doc.setTextColor(180, 0, 0); // Қызыл
+            doc.setFontSize(22);
+            doc.text("ТАБЫС ЕТІЛЕДІ:", 148, 70, {align: 'center'});
+            
+            // Оқушының Аты-жөні (Ерекше үлкен қаріп)
+            doc.setTextColor(30, 30, 30); 
+            doc.setFontSize(40);
+            doc.text(name.toUpperCase(), 148, 100, {align: 'center'});
+
+            // Сызық
+            doc.setDrawColor(180, 0, 0);
+            doc.setLineWidth(0.5);
+            doc.line(70, 110, 227, 110);
+
+            // Бағдарлама мәтіні
+            doc.setTextColor(60, 60, 60); // Ашық сұр
+            doc.setFontSize(18);
+            doc.text("«Адал азамат – Біртұтас тәрбие» бағдарламасымен", 148, 130, {align: 'center'});
+            doc.text("танысқаны және қорытынды тесттен сәтті өткені үшін беріледі.", 148, 140, {align: 'center'});
+            
+            // Нәтиже мен Дата
+            doc.setFontSize(16);
+            doc.text(`Нәтиже: ${score}/10 балл`, 148, 155, {align: 'center'});
+            const today = new Date().toLocaleDateString();
+            doc.text(`Күні: ${today}`, 148, 165, {align: 'center'});
+
+            // 5. МӨР ЖӘНЕ ҚОЛТАҢБА ОРНЫ (Үлгіге ұқсас)
+            // Мөр (сәндік қызыл-алтын шеңбер)
+            doc.setDrawColor(212, 175, 55);
+            doc.setFillColor(180, 0, 0);
+            doc.circle(245, 170, 18, 'F');
+            doc.setLineWidth(1);
+            doc.circle(245, 170, 20); // Сыртқы алтын шеңбер
+            doc.setFontSize(8);
+            doc.setTextColor(255, 255, 255);
+            doc.text("ADAL AZAMAT\nOFFICIAL\n2026", 245, 168, {align: 'center'});
+
+            // Мұғалім қолтаңбасы
+            doc.setTextColor(30, 30, 30);
+            doc.setFontSize(14);
+            doc.text("Жетекші мұғалім:________Төлеуханов Ерзат Нұржанұлы ", 50, 185);
+            
+
+            // Файлды жүктеу (Автоматты түрде)
+            doc.save(`Sertifikat_AdalAzamat_${name}.pdf`);
+        });
+}
+</script>
+
+</body>
+</html>
